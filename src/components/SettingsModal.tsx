@@ -165,29 +165,6 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                   </button>
                 </div>
               </div>
-              <div className="form-grid-2">
-                <div className="form-group">
-                  <label>Default Font Size</label>
-                  <input
-                    type="number"
-                    min={8}
-                    max={72}
-                    value={settings.font_size}
-                    onChange={(e) =>
-                      set("font_size", parseInt(e.target.value) || 12)
-                    }
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Default Text Color</label>
-                  <input
-                    type="color"
-                    value={settings.font_color}
-                    onChange={(e) => set("font_color", e.target.value)}
-                    className="color-input"
-                  />
-                </div>
-              </div>
             </section>
           )}
 

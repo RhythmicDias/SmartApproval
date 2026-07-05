@@ -17,10 +17,8 @@ export interface AppSettings {
   smtp_password: string;
   smtp_from: string;
 
-  // Eligibility & Font
+  // Eligibility
   eligibility_folder: string;
-  font_size: number;
-  font_color: string;
 
   // Insurance Email
   ins_to: string;
@@ -42,8 +40,6 @@ export const defaultSettings: AppSettings = {
   smtp_password: "",
   smtp_from: "",
   eligibility_folder: "",
-  font_size: 12,
-  font_color: "#000000",
   ins_to: "",
   ins_cc: "",
   ins_bcc: "",
