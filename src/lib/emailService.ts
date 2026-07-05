@@ -69,6 +69,9 @@ export function formatEmailBody(
   return `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #2d3748; max-width: 650px; margin: 0 auto; padding: 10px 0;">
       ${htmlParagraphs}
+      <div style="margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 8px; font-size: 11px; font-style: italic; color: #718096; line-height: 1.4;">
+        Auto-generated with SmartApproval by Stephen Dias
+      </div>
     </div>
   `.trim();
 }
