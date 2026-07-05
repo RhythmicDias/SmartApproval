@@ -259,9 +259,34 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                     type="email"
                     value={settings.smtp_from}
                     onChange={(e) => set("smtp_from", e.target.value)}
-                    placeholder="Neuropedia SmartApproval <you@hospital.com>"
+                    placeholder="SmartApproval <you@gmail.com>"
                   />
                 </div>
+              </div>
+
+              {/* Gmail Guide */}
+              <div style={{ marginTop: "20px", padding: "16px", background: "var(--bg-base)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)" }}>
+                <h4 style={{ margin: "0 0 10px 0", fontSize: "0.85rem", fontWeight: 600, color: "var(--primary)" }}>Gmail Configuration Guide</h4>
+                <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: "1.6" }}>
+                  <li><strong>SMTP Host:</strong> Use <code>smtp.gmail.com</code></li>
+                  <li><strong>SMTP Port:</strong> Use <code>587</code> (STARTTLS) or <code>465</code> (Implicit TLS)</li>
+                  <li><strong>How to get Google App Password:</strong>
+                    <ol style={{ margin: "4px 0 0 0", paddingLeft: "16px" }}>
+                      <li>Go to your Google Account (<span onClick={async () => {
+                        try {
+                          await openPath("https://myaccount.google.com");
+                        } catch (e) {
+                          console.error(e);
+                        }
+                      }} style={{ color: "var(--primary)", cursor: "pointer", textDecoration: "underline" }}>myaccount.google.com</span>).</li>
+                      <li>Navigate to <strong>Security</strong> on the left-side menu.</li>
+                      <li>Ensure <strong>2-Step Verification</strong> is enabled.</li>
+                      <li>Search for "App Passwords" in the search box at the top, or go to 2-Step Verification and scroll to the bottom.</li>
+                      <li>Generate a new App Password (name it "SmartApproval").</li>
+                      <li>Copy the generated 16-character code and paste it into the <strong>Password</strong> field above.</li>
+                    </ol>
+                  </li>
+                </ul>
               </div>
             </section>
           )}
