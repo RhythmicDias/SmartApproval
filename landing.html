@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartApproval — Fast Medical Report Merging & Dispatch</title>
+  <meta name="description" content="A premium, native desktop application for pediatric neurology and clinical workflows to merge medical reports and send them for insurance approval instantly.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ─────────────────────────────────────────────────────────────────────────
+       Design Tokens & Reset
+    ───────────────────────────────────────────────────────────────────────── */
+    :root {
+      --bg: #0c0b09;
+      --surface: #151311;
+      --card-bg: rgba(21, 19, 17, 0.7);
+      --border: rgba(240, 84, 45, 0.15);
+      --primary: #f0542d;
+      --primary-hover: #d83d17;
+      --primary-glow: rgba(240, 84, 45, 0.35);
+      --text: #f5f2eb;
+      --text-secondary: #c7c2ba;
+      --text-muted: #948e87;
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Background glow decorations */
+    .glow-bg {
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, rgba(12, 11, 9, 0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       Layout Containers
+    ───────────────────────────────────────────────────────────────────────── */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header styling */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .brand span {
+      color: var(--primary);
+    }
+
+    .github-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .github-link:hover {
+      color: var(--text);
+      border-color: var(--primary);
+      background: var(--primary-glow);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px 0;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: var(--primary-glow);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: 3.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 650px;
+      margin: 0 auto 40px auto;
+    }
+
+    /* CTA Buttons */
+    .cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 20px var(--primary-glow);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px var(--primary-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Features Grid */
+    .features {
+      padding: 60px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card h3 span {
+      color: var(--primary);
+      font-size: 1.4rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Footers */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 80px;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive designs */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-bg"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <a href="#" class="brand">
+        <img src="public/logo.png" alt="SmartApproval Logo">
+        Smart<span>Approval</span>
+      </a>
+      <a href="https://github.com/RhythmicDias/SmartApproval" class="github-link" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <span class="badge">Release v1.0.37 Available</span>
+      <h1>Fast, Secure Medical Report Merging & Dispatch</h1>
+      <p>A native desktop application built for pediatric neurology and clinical workflows to merge client medical reports, stamp details, and handle SMTP insurance approvals instantly.</p>
+      
+      <div class="cta-group">
+        <a href="https://github.com/RhythmicDias/SmartApproval/releases/download/v1.0.37/SmartApproval_1.0.37_x64-setup.exe" class="btn btn-primary">Download Installer (.exe)</a>
+        <a href="https://github.com/RhythmicDias/SmartApproval/releases/download/v1.0.37/SmartApproval_1.0.37_x64_en-US.msi" class="btn btn-secondary">Download MSI Package</a>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <h2 class="section-title">Key Features</h2>
+      <div class="grid">
+        <div class="card">
+          <h3><span>⚡</span> EMR-Only Dispatch</h3>
+          <p>Skip the PDF merging. The new Fast-Path action lets you select clinical services, extract patient details directly from the medical report filename, and populate approval emails instantly.</p>
+        </div>
+        <div class="card">
+          <h3><span>🎨</span> Premium Dark Mode</h3>
+          <p>Toggle between Light and Dark mode within General settings. Rest easy with a custom warm-charcoal aesthetic color palette matching the clinical branding.</p>
+        </div>
+        <div class="card">
+          <h3><span>✉️</span> Dynamic HTML emails</h3>
+          <p>Dispatched approval requests are formatted in premium styled HTML with bold patient details and service links, rather than plain text, optimizing claims processing speed.</p>
+        </div>
+        <div class="card">
+          <h3><span>📈</span> Version Updates</h3>
+          <p>Integrated update checking queries the GitHub Releases API dynamically to alert you immediately whenever a new release installer becomes available.</p>
+        </div>
+        <div class="card">
+          <h3><span>🔒</span> Secure local storage</h3>
+          <p>All server credentials, SMTP passwords, and settings are saved completely locally in your OS profile directory. Safe, untracked, and offline.</p>
+        </div>
+        <div class="card">
+          <h3><span>📂</span> Visual Drag & Drop</h3>
+          <p>Drag, drop, and rearrange files with grip handles to order pages before merging, ensuring clinical reports are organized perfectly.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2026 <a href="https://github.com/RhythmicDias" target="_blank" rel="noopener noreferrer">Stephen Dias</a>. All rights reserved. Created with SmartApproval.</p>
+    </footer>
+  </div>
+
+</body>
+</html>
