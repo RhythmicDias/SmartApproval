@@ -84,8 +84,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
 
         <div className="modal-footer">
           <span className="about-version">
-            SmartApproval v1.0.37 &copy; {new Date().getFullYear()} Neuropedia
-            &mdash; Developed by{" "}
+            &copy; 2026{" "}
             <span
               style={{ cursor: "pointer", textDecoration: "underline", color: "var(--primary)" }}
               onClick={async () => {
@@ -97,7 +96,8 @@ export function AboutModal({ onClose }: AboutModalProps) {
               }}
             >
               Stephen Dias
-            </span>
+            </span>{" "}
+            &mdash; SmartApproval v1.0.37
           </span>
           <button className="btn btn-primary" onClick={onClose}>
             Close
