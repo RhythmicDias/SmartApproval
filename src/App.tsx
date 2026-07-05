@@ -11,7 +11,7 @@ import { AboutModal } from "./components/AboutModal";
 
 import { mergePdfs } from "./lib/pdfEngine";
 import { loadSettings, type AppSettings, defaultSettings } from "./lib/settings";
-import { buildSubject, buildMergedFileName, extractInfoFromFilename } from "./lib/helpers";
+import { buildSubject, buildMergedFileName, extractInfoFromFilename, isNewerVersion } from "./lib/helpers";
 
 const SERVICE_BUTTONS = [
   "EEG", "ABR", "OT", "SLT", "PT", "Psychology", "Psychiatry", "NCS", "EMG",
@@ -28,6 +28,7 @@ function App() {
   const [mergeError, setMergeError] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [hasUpdate, setHasUpdate] = useState(false);
 
   // Load settings and downloads path on mount
   useEffect(() => {
@@ -35,6 +36,25 @@ function App() {
       setSettings(s);
     });
     invoke<string>("get_downloads_path").then(setDownloadsPath);
+
+    // Auto check updates on launch
+    const checkUpdatesOnLaunch = async () => {
+      try {
+        const res = await fetch("https://api.github.com/repos/RhythmicDias/SmartApproval/releases/latest");
+        if (res.ok) {
+          const data = await res.json();
+          const latestVersion = data.tag_name;
+          const currentVersion = "1.0.37";
+          if (isNewerVersion(currentVersion, latestVersion)) {
+            setHasUpdate(true);
+          }
+        }
+      } catch (err) {
+        console.warn("Auto update check failed:", err);
+      }
+    };
+
+    checkUpdatesOnLaunch();
   }, []);
 
   const reloadSettings = useCallback(() => {
@@ -161,18 +181,31 @@ function App() {
     <div className="app-container">
       {/* ─── Header ─── */}
       <header className="app-header">
-        <div className="header-title">
-          <span className="header-brand">Neuropedia</span>
-          <span className="header-separator">—</span>
-          <span className="header-app">SmartApproval</span>
+        <div className="header-title" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <img src="/logo.png" alt="SmartApproval Logo" style={{ height: "24px", width: "24px", objectFit: "contain", borderRadius: "6px" }} />
+          <span className="header-brand">SmartApproval</span>
         </div>
         <div className="header-actions">
           <button
             className="btn btn-ghost btn-sm"
             onClick={() => setShowSettings(true)}
             title="Settings"
+            style={{ position: "relative" }}
           >
             <Settings size={15} /> Settings
+            {hasUpdate && (
+              <span style={{
+                position: "absolute",
+                top: "-3px",
+                right: "-3px",
+                width: "8px",
+                height: "8px",
+                backgroundColor: "var(--primary)",
+                borderRadius: "50%",
+                boxShadow: "0 0 0 2px var(--bg-surface), 0 0 6px var(--primary)",
+                display: "inline-block"
+              }} title="Update available!" />
+            )}
           </button>
           <button
             className="btn btn-ghost btn-sm"
@@ -304,6 +337,7 @@ function App() {
         <SettingsModal
           onClose={() => setShowSettings(false)}
           onSaved={reloadSettings}
+          defaultTab={hasUpdate ? "updates" : "general"}
         />
       )}
       {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}

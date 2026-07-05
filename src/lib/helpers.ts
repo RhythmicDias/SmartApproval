@@ -79,3 +79,18 @@ export function uniqueFilename(base: string): string {
 export function basename(filePath: string): string {
   return filePath.replace(/\\/g, "/").split("/").pop() ?? filePath;
 }
+
+// ---------------------------------------------------------------------------
+// Compare semver version strings to see if remote is newer
+// ---------------------------------------------------------------------------
+export function isNewerVersion(current: string, remote: string): boolean {
+  const c = current.replace(/^v/i, "").split(".").map(Number);
+  const r = remote.replace(/^v/i, "").split(".").map(Number);
+  for (let i = 0; i < Math.max(c.length, r.length); i++) {
+    const cv = c[i] || 0;
+    const rv = r[i] || 0;
+    if (rv > cv) return true;
+    if (cv > rv) return false;
+  }
+  return false;
+}

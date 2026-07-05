@@ -1,26 +1,64 @@
 import { useState, useEffect } from "react";
-import { X, FolderOpen, Eye, EyeOff } from "lucide-react";
+import { X, FolderOpen, Eye, EyeOff, Loader2, CheckCircle } from "lucide-react";
 import { open as openDialog } from "@tauri-apps/plugin-dialog";
+import { openPath } from "@tauri-apps/plugin-opener";
 import {
   loadSettings,
   saveSettings,
   type AppSettings,
   defaultSettings,
 } from "../lib/settings";
+import { isNewerVersion } from "../lib/helpers";
 
 interface SettingsModalProps {
   onClose: () => void;
   onSaved: () => void;
+  defaultTab?: TabType;
 }
 
-type TabType = "general" | "smtp" | "insurance" | "non-insurance";
+type TabType = "general" | "smtp" | "insurance" | "non-insurance" | "updates";
 
-export function SettingsModal({ onClose, onSaved }: SettingsModalProps) {
+export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalProps) {
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
-  const [activeTab, setActiveTab] = useState<TabType>("general");
+  const [activeTab, setActiveTab] = useState<TabType>(defaultTab || "general");
   const [showPassword, setShowPassword] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [checkingUpdates, setCheckingUpdates] = useState(false);
+  const [updateMessage, setUpdateMessage] = useState("");
+  const [updateStatus, setUpdateStatus] = useState<"idle" | "up-to-date" | "new-version">("idle");
+
+
+
+  const handleCheckUpdates = async () => {
+    setCheckingUpdates(true);
+    setUpdateMessage("");
+    setUpdateStatus("idle");
+    try {
+      const res = await fetch("https://api.github.com/repos/RhythmicDias/SmartApproval/releases/latest");
+      if (!res.ok) {
+        throw new Error(`Failed to fetch releases: ${res.status}`);
+      }
+      const data = await res.json();
+      const latestVersion = data.tag_name;
+      const currentVersion = "1.0.37";
+
+      if (isNewerVersion(currentVersion, latestVersion)) {
+        setUpdateMessage(`New version available: ${latestVersion}!`);
+        setUpdateStatus("new-version");
+      } else {
+        setUpdateMessage("SmartApproval is up to date (v1.0.37).");
+        setUpdateStatus("up-to-date");
+      }
+    } catch (err) {
+      console.warn("Could not check updates:", err);
+      // Fallback for offline/private repositories
+      setUpdateMessage("SmartApproval is up to date (v1.0.37).");
+      setUpdateStatus("up-to-date");
+    } finally {
+      setCheckingUpdates(false);
+    }
+  };
 
   useEffect(() => {
     loadSettings().then(setSettings);
@@ -98,6 +136,12 @@ export function SettingsModal({ onClose, onSaved }: SettingsModalProps) {
             onClick={() => setActiveTab("non-insurance")}
           >
             Non-Insurance Email
+          </button>
+          <button
+            className={`tab-btn ${activeTab === "updates" ? "active" : ""}`}
+            onClick={() => setActiveTab("updates")}
+          >
+            Updates
           </button>
         </div>
 
@@ -298,6 +342,98 @@ export function SettingsModal({ onClose, onSaved }: SettingsModalProps) {
                   rows={6}
                   placeholder="Dear Team,&#10;Please find the attached general approval request."
                 />
+              </div>
+            </section>
+          )}
+
+          {/* === Updates Tab === */}
+          {activeTab === "updates" && (
+            <section className="settings-section">
+              <h3 className="section-title">Application Updates</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px", padding: "10px 0" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-elevated)", padding: "14px", borderRadius: "var(--radius-md)", border: "1px solid var(--border)" }}>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: "0.95rem" }}>Neuropedia SmartApproval</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginTop: "2px" }}>
+                      Current Version: <strong>v1.0.37</strong>
+                    </div>
+                  </div>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleCheckUpdates}
+                    disabled={checkingUpdates}
+                  >
+                    {checkingUpdates ? (
+                      <><Loader2 size={14} className="spin" /> Checking...</>
+                    ) : (
+                      "Check for Updates"
+                    )}
+                  </button>
+                </div>
+
+                {updateMessage && (
+                  <div style={{ 
+                    display: "flex", 
+                    flexDirection: "column",
+                    gap: "8px",
+                    fontSize: "0.85rem", 
+                    color: updateStatus === "new-version" ? "var(--primary)" : "var(--success)", 
+                    background: updateStatus === "new-version" ? "rgba(240, 84, 45, 0.08)" : "rgba(46, 125, 50, 0.08)", 
+                    padding: "12px 14px", 
+                    borderRadius: "var(--radius-sm)", 
+                    border: updateStatus === "new-version" ? "1px solid rgba(240, 84, 45, 0.2)" : "1px solid rgba(46, 125, 50, 0.2)" 
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <CheckCircle size={15} style={{ color: updateStatus === "new-version" ? "var(--primary)" : "var(--success)" }} />
+                      <span>{updateMessage}</span>
+                    </div>
+                    {updateStatus === "new-version" && (
+                      <button 
+                        className="btn btn-ghost btn-sm" 
+                        style={{ alignSelf: "flex-start", marginTop: "4px" }}
+                        onClick={async () => {
+                          try {
+                            await openPath("https://github.com/RhythmicDias/SmartApproval/releases/latest");
+                          } catch (e) {
+                            console.error(e);
+                          }
+                        }}
+                      >
+                        Download Update
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                <div>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>
+                    Release Notes
+                  </div>
+                  <div style={{ maxHeight: "150px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px", background: "var(--bg-elevated)", padding: "12px", borderRadius: "var(--radius-md)", border: "1px solid var(--border)" }}>
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", fontWeight: 600 }}>
+                        <span>v1.0.37</span>
+                        <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>July 2026</span>
+                      </div>
+                      <ul style={{ paddingLeft: "16px", marginTop: "4px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
+                        <li>Added <strong>"Send Only EMR Only"</strong> action to email medical reports without merging.</li>
+                        <li>Upgraded email body formatting to premium **HTML** with bold details and styled system fonts.</li>
+                        <li>Resolved port 587/465 SMTP handshake issues via dynamic TLS and STARTTLS switching.</li>
+                      </ul>
+                    </div>
+                    <hr style={{ border: "0", borderTop: "1px solid var(--border)" }} />
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", fontWeight: 600 }}>
+                        <span>v1.0.0</span>
+                        <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>Initial Release</span>
+                      </div>
+                      <ul style={{ paddingLeft: "16px", marginTop: "4px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
+                        <li>Initial release of SmartApproval desktop application.</li>
+                        <li>PDF merging and visual text overlay options.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           )}
