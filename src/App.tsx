@@ -3,6 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { open as openDialog } from "@tauri-apps/plugin-dialog";
 import { readFile, writeFile } from "@tauri-apps/plugin-fs";
 import { Settings, Info, Plus, Trash2, FolderOpen } from "lucide-react";
+import { openPath } from "@tauri-apps/plugin-opener";
 
 import { DragDropList } from "./components/DragDropList";
 import { SendApprovalPanel } from "./components/SendApprovalPanel";
@@ -329,7 +330,20 @@ function App() {
 
       {/* ─── Footer ─── */}
       <footer className="app-footer">
-        &copy; 2025 Stephen Dias &mdash; Neuropedia SmartApproval v1.0.37
+        &copy; 2026{" "}
+        <span
+          style={{ cursor: "pointer", textDecoration: "underline", color: "var(--primary)" }}
+          onClick={async () => {
+            try {
+              await openPath("https://github.com/RhythmicDias");
+            } catch (e) {
+              console.error(e);
+            }
+          }}
+        >
+          Stephen Dias
+        </span>{" "}
+        &mdash; SmartApproval v1.0.37
       </footer>
 
       {/* ─── Modals ─── */}

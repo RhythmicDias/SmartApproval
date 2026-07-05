@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import { openPath } from "@tauri-apps/plugin-opener";
 
 interface AboutModalProps {
   onClose: () => void;
@@ -84,7 +85,19 @@ export function AboutModal({ onClose }: AboutModalProps) {
         <div className="modal-footer">
           <span className="about-version">
             SmartApproval v1.0.37 &copy; {new Date().getFullYear()} Neuropedia
-            &mdash; Developed by Stephen Dias
+            &mdash; Developed by{" "}
+            <span
+              style={{ cursor: "pointer", textDecoration: "underline", color: "var(--primary)" }}
+              onClick={async () => {
+                try {
+                  await openPath("https://github.com/RhythmicDias");
+                } catch (e) {
+                  console.error(e);
+                }
+              }}
+            >
+              Stephen Dias
+            </span>
           </span>
           <button className="btn btn-primary" onClick={onClose}>
             Close
