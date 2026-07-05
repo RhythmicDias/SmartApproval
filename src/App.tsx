@@ -16,6 +16,7 @@ import { buildSubject, buildMergedFileName, extractInfoFromFilename, isNewerVers
 
 const SERVICE_BUTTONS = [
   "EEG", "ABR", "OT", "SLT", "PT", "Psychology", "Psychiatry", "NCS", "EMG",
+  "ABA", "Dev-Peds", "Dietics"
 ];
 
 function App() {
