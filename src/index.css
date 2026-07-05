@@ -37,6 +37,24 @@
   --transition: 0.18s ease;
 }
 
+[data-theme="dark"] {
+  --bg-base: #141210;
+  --bg-surface: #201c18;
+  --bg-elevated: #2b2723;
+  --bg-card: rgba(43, 39, 35, 0.75);
+
+  --text-primary: #f5f2eb;
+  --text-secondary: #c7c2ba;
+  --text-muted: #948e87;
+
+  --border: rgba(245, 242, 235, 0.08);
+  --border-focus: rgba(240, 84, 45, 0.6);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.75);
+}
+
 /* ─────────────────────────────────────────
    Reset & Base
 ───────────────────────────────────────── */

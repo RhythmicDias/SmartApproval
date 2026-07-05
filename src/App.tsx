@@ -62,6 +62,12 @@ function App() {
     loadSettings().then(setSettings);
   }, []);
 
+  // Apply theme when settings change
+  useEffect(() => {
+    const theme = settings.theme || "light";
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [settings.theme]);
+
   const handleResetForm = () => {
     setFiles([]);
     setCustomText("");

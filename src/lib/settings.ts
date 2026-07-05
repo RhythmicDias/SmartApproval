@@ -31,6 +31,9 @@ export interface AppSettings {
   non_ins_cc: string;
   non_ins_bcc: string;
   non_ins_body: string;
+
+  // UI Theme
+  theme: "light" | "dark";
 }
 
 export const defaultSettings: AppSettings = {
@@ -48,6 +51,7 @@ export const defaultSettings: AppSettings = {
   non_ins_cc: "",
   non_ins_bcc: "",
   non_ins_body: "Dear Team,\n\nPlease find the attached medical report for {insert patient name, MRN] and provide appropriate referrals and bookings for {all services from the selected services} at the earlist.\n\nKind regards,\n{sender's email name only without domain name}",
+  theme: "light",
 };
 
 const SETTINGS_FILE = "settings.json";

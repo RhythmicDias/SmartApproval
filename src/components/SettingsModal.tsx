@@ -62,7 +62,20 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
 
   useEffect(() => {
     loadSettings().then(setSettings);
+    // On cancel/close, revert theme to what is saved in settings.json
+    return () => {
+      loadSettings().then((saved) => {
+        document.documentElement.setAttribute("data-theme", saved.theme || "light");
+      });
+    };
   }, []);
+
+  // Live preview theme in modal
+  useEffect(() => {
+    if (settings.theme) {
+      document.documentElement.setAttribute("data-theme", settings.theme);
+    }
+  }, [settings.theme]);
 
   const set = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
@@ -164,6 +177,26 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                     <FolderOpen size={14} /> Browse
                   </button>
                 </div>
+              </div>
+              <div className="form-group" style={{ marginTop: "16px" }}>
+                <label>Color Theme</label>
+                <select
+                  value={settings.theme || "light"}
+                  onChange={(e) => set("theme", e.target.value as "light" | "dark")}
+                  style={{ 
+                    width: "100%", 
+                    padding: "8px 12px", 
+                    borderRadius: "var(--radius-sm)", 
+                    border: "1px solid var(--border)", 
+                    background: "var(--bg-elevated)", 
+                    color: "var(--text-primary)", 
+                    fontSize: "0.9rem",
+                    outline: "none"
+                  }}
+                >
+                  <option value="light">Light Theme</option>
+                  <option value="dark">Dark Theme</option>
+                </select>
               </div>
             </section>
           )}
