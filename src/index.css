@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
 
 /* ─────────────────────────────────────────
    Design Tokens
@@ -44,7 +44,7 @@
 
 html, body, #root {
   height: 100%;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Outfit", system-ui, sans-serif;
   font-size: 14px;
   background: var(--bg-base);
   color: var(--text-primary);
