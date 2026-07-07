@@ -97,7 +97,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
             >
               Stephen Dias
             </span>{" "}
-            &mdash; SmartApproval v1.0.41
+            &mdash; SmartApproval v1.0.42
           </span>
           <button className="btn btn-primary" onClick={onClose}>
             Close

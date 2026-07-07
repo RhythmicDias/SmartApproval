@@ -43,7 +43,7 @@ function App() {
         if (res.ok) {
           const data = await res.json();
           const latestVersion = data.tag_name;
-          const currentVersion = "1.0.41";
+          const currentVersion = "1.0.42";
           if (isNewerVersion(currentVersion, latestVersion)) {
             setHasUpdate(true);
           }
@@ -267,11 +267,20 @@ function App() {
               rows={2}
             />
 
-            {/* Service quick-insert buttons */}
-            <div className="service-groups" style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "6px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", minWidth: "85px" }}>Procedures:</span>
-                <div className="service-buttons" style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+            {/* Service quick-insert buttons (Grouped Cards) */}
+            <div className="service-groups-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px", marginTop: "10px" }}>
+              {/* Procedures Group */}
+              <div style={{
+                background: "var(--bg-elevated)",
+                border: "1.5px solid var(--primary)",
+                borderRadius: "var(--radius-md)",
+                padding: "12px 14px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px"
+              }}>
+                <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-secondary)" }}>Procedures:</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {["EEG", "ABR", "NCS", "EMG", "ECG"].map((svc) => (
                     <button
                       key={svc}
@@ -283,9 +292,19 @@ function App() {
                   ))}
                 </div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", minWidth: "85px" }}>Therapies:</span>
-                <div className="service-buttons" style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+
+              {/* Therapies Group */}
+              <div style={{
+                background: "var(--bg-elevated)",
+                border: "1.5px solid var(--primary)",
+                borderRadius: "var(--radius-md)",
+                padding: "12px 14px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px"
+              }}>
+                <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-secondary)" }}>Therapies:</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {["ABA", "OT", "PT", "SLT"].map((svc) => (
                     <button
                       key={svc}
@@ -297,9 +316,19 @@ function App() {
                   ))}
                 </div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", minWidth: "85px" }}>Referrals:</span>
-                <div className="service-buttons" style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+
+              {/* Referrals Group */}
+              <div style={{
+                background: "var(--bg-elevated)",
+                border: "1.5px solid var(--primary)",
+                borderRadius: "var(--radius-md)",
+                padding: "12px 14px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px"
+              }}>
+                <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-secondary)" }}>Referrals:</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {["Psychology", "Psychiatry", "Dev-Peds", "Dietic"].map((svc) => (
                     <button
                       key={svc}
@@ -393,7 +422,7 @@ function App() {
         >
           SmartApproval
         </span>{" "}
-        v1.0.41
+        v1.0.42
       </footer>
 
       {/* ─── Modals ─── */}
