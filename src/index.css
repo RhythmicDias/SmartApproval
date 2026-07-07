@@ -69,6 +69,10 @@ html, body, #root {
   -webkit-font-smoothing: antialiased;
 }
 
+button, input, select, textarea {
+  font-family: inherit;
+}
+
 /* ─────────────────────────────────────────
    Layout
 ───────────────────────────────────────── */
