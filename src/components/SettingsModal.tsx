@@ -43,19 +43,19 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
       const data = await res.json();
       setLatestRelease(data);
       const latestVersion = data.tag_name;
-      const currentVersion = "1.0.44";
+      const currentVersion = "1.0.45";
 
       if (isNewerVersion(currentVersion, latestVersion)) {
         setUpdateMessage(`New version available: ${latestVersion}!`);
         setUpdateStatus("new-version");
       } else {
-        setUpdateMessage("SmartApproval is up to date (v1.0.44).");
+        setUpdateMessage("SmartApproval is up to date (v1.0.45).");
         setUpdateStatus("up-to-date");
       }
     } catch (err) {
       console.warn("Could not check updates:", err);
       // Fallback for offline/private repositories
-      setUpdateMessage("SmartApproval is up to date (v1.0.44).");
+      setUpdateMessage("SmartApproval is up to date (v1.0.45).");
       setUpdateStatus("up-to-date");
     } finally {
       setCheckingUpdates(false);
@@ -90,7 +90,14 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
       // Launch installer
       await openPath(outputPath);
       
-      setUpdateStatus("idle");
+      setUpdateMessage("Launching installer, shutting down...");
+      setTimeout(async () => {
+        try {
+          await invoke("exit_app");
+        } catch (e) {
+          console.error("Failed to exit app:", e);
+        }
+      }, 800);
     } catch (err: any) {
       console.error(err);
       setUpdateMessage(`Update failed: ${err.message || err}`);
@@ -447,7 +454,7 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                   <div>
                     <div style={{ fontWeight: 600, fontSize: "0.95rem" }}>Neuropedia SmartApproval</div>
                     <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginTop: "2px" }}>
-                      Current Version: <strong>v1.0.44</strong>
+                      Current Version: <strong>v1.0.45</strong>
                     </div>
                   </div>
                   <button
@@ -503,11 +510,22 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                   <div style={{ maxHeight: "150px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px", background: "var(--bg-elevated)", padding: "12px", borderRadius: "var(--radius-md)", border: "1px solid var(--border)" }}>
                     <div>
                       <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", fontWeight: 600 }}>
+                        <span>v1.0.45</span>
+                        <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>July 2026</span>
+                      </div>
+                      <ul style={{ paddingLeft: "16px", marginTop: "4px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
+                        <li>Resolved installer NSIS uninstallation file lock error by cleanly exiting application on upgrade launch.</li>
+                      </ul>
+                    </div>
+                    <hr style={{ border: "0", borderTop: "1px solid var(--border)" }} />
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", fontWeight: 600 }}>
                         <span>v1.0.44</span>
                         <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>July 2026</span>
                       </div>
                       <ul style={{ paddingLeft: "16px", marginTop: "4px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
                         <li>Set Windows installer publisher metadata to <strong>RhythmicDias</strong> instead of default first identifier segment.</li>
+                        <li>Fixed font-family inheritance for Settings modal navigation tabs.</li>
                       </ul>
                     </div>
                     <hr style={{ border: "0", borderTop: "1px solid var(--border)" }} />

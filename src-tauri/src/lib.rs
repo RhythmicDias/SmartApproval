@@ -158,6 +158,11 @@ async fn download_file(url: String, path: String) -> Result<(), String> {
     Ok(())
 }
 
+#[tauri::command]
+fn exit_app() {
+    std::process::exit(0);
+}
+
 // ---------------------------------------------------------------------------
 // App entry point
 // ---------------------------------------------------------------------------
@@ -174,6 +179,7 @@ pub fn run() {
             check_file_exists,
             send_email_smtp,
             download_file,
+            exit_app,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
