@@ -198,6 +198,24 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                   <option value="dark">Dark Theme</option>
                 </select>
               </div>
+              <div className="form-group" style={{ marginTop: "16px" }}>
+                <label>Dr. Aman's Sec Email</label>
+                <input
+                  type="email"
+                  value={settings.sec_aman_email || ""}
+                  onChange={(e) => set("sec_aman_email", e.target.value)}
+                  placeholder="aman.sec@hospital.com"
+                />
+              </div>
+              <div className="form-group" style={{ marginTop: "16px" }}>
+                <label>Dr. Arif's Sec Email</label>
+                <input
+                  type="email"
+                  value={settings.sec_arif_email || ""}
+                  onChange={(e) => set("sec_arif_email", e.target.value)}
+                  placeholder="arif.sec@hospital.com"
+                />
+              </div>
             </section>
           )}
 

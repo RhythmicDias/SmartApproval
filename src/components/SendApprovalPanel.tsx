@@ -30,6 +30,8 @@ export function SendApprovalPanel({
   const [isInsurance, setIsInsurance] = useState(true);
   const [status, setStatus] = useState<SendStatus>("idle");
   const [statusMsg, setStatusMsg] = useState("");
+  const [bccAmanSec, setBccAmanSec] = useState(false);
+  const [bccArifSec, setBccArifSec] = useState(false);
 
   // Sync state values when props change
   useEffect(() => {
@@ -41,6 +43,14 @@ export function SendApprovalPanel({
     setStatus("sending");
     setStatusMsg("");
 
+    const extraBccList: string[] = [];
+    if (bccAmanSec && settings.sec_aman_email) {
+      extraBccList.push(settings.sec_aman_email.trim());
+    }
+    if (bccArifSec && settings.sec_arif_email) {
+      extraBccList.push(settings.sec_arif_email.trim());
+    }
+
     const payload: EmailPayload = {
       subject: editSubject,
       attachmentPath: mergedFilePath,
@@ -48,6 +58,7 @@ export function SendApprovalPanel({
       patientName,
       mrn,
       services,
+      extraBcc: extraBccList.length > 0 ? extraBccList.join(";") : undefined,
     };
 
     const result = await sendEmail(settings, payload);
@@ -111,6 +122,28 @@ export function SendApprovalPanel({
             placeholder="Email subject"
           />
         </div>
+      </div>
+
+      {/* BCC Secretary Checkboxes */}
+      <div className="email-field-row" style={{ display: "flex", gap: "20px", paddingLeft: "60px", marginTop: "4px", marginBottom: "4px" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.82rem", color: "var(--text-secondary)", cursor: "pointer", fontWeight: 500 }}>
+          <input
+            type="checkbox"
+            checked={bccAmanSec}
+            onChange={(e) => setBccAmanSec(e.target.checked)}
+            style={{ width: "auto", cursor: "pointer", accentColor: "var(--primary)" }}
+          />
+          Dr. Aman's Sec
+        </label>
+        <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.82rem", color: "var(--text-secondary)", cursor: "pointer", fontWeight: 500 }}>
+          <input
+            type="checkbox"
+            checked={bccArifSec}
+            onChange={(e) => setBccArifSec(e.target.checked)}
+            style={{ width: "auto", cursor: "pointer", accentColor: "var(--primary)" }}
+          />
+          Dr. Arif's Sec
+        </label>
       </div>
 
       {/* Segmented Selection & Status & Send button */}

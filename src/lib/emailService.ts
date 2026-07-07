@@ -8,6 +8,7 @@ export interface EmailPayload {
   patientName?: string;
   mrn?: string;
   services?: string;
+  extraBcc?: string;
 }
 
 export interface EmailResult {
@@ -103,7 +104,10 @@ export async function sendEmail(
   // Select target list based on Insurance / Non-insurance selection
   const to = isInsurance ? settings.ins_to : settings.non_ins_to;
   const cc = isInsurance ? settings.ins_cc : settings.non_ins_cc;
-  const bcc = isInsurance ? settings.ins_bcc : settings.non_ins_bcc;
+  let bcc = isInsurance ? settings.ins_bcc : settings.non_ins_bcc;
+  if (payload.extraBcc) {
+    bcc = bcc.trim() ? `${bcc};${payload.extraBcc}` : payload.extraBcc;
+  }
   let body = isInsurance ? settings.ins_body : settings.non_ins_body;
 
   // Format the body dynamically if placeholders/values are present

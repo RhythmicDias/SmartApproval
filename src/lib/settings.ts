@@ -34,6 +34,10 @@ export interface AppSettings {
 
   // UI Theme
   theme: "light" | "dark";
+
+  // Secretary Emails
+  sec_aman_email: string;
+  sec_arif_email: string;
 }
 
 export const defaultSettings: AppSettings = {
@@ -52,6 +56,8 @@ export const defaultSettings: AppSettings = {
   non_ins_bcc: "",
   non_ins_body: "Dear Team,\n\nPlease find the attached medical report for {insert patient name, MRN] and provide appropriate referrals and bookings for {all services from the selected services} at the earlist.\n\nKind regards,\n{sender's email name only without domain name}",
   theme: "light",
+  sec_aman_email: "",
+  sec_arif_email: "",
 };
 
 const SETTINGS_FILE = "settings.json";
