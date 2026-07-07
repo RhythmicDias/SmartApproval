@@ -136,6 +136,28 @@ async fn send_email_smtp(
     Ok("Email sent successfully.".to_string())
 }
 
+#[tauri::command]
+async fn download_file(url: String, path: String) -> Result<(), String> {
+    let response = reqwest::get(&url)
+        .await
+        .map_err(|e| format!("Failed to connect: {e}"))?;
+        
+    let status = response.status();
+    if !status.is_success() {
+        return Err(format!("Download failed with status: {status}"));
+    }
+    
+    let bytes = response
+        .bytes()
+        .await
+        .map_err(|e| format!("Failed to read bytes: {e}"))?;
+        
+    fs::write(path, bytes)
+        .map_err(|e| format!("Failed to save file: {e}"))?;
+        
+    Ok(())
+}
+
 // ---------------------------------------------------------------------------
 // App entry point
 // ---------------------------------------------------------------------------
@@ -151,6 +173,7 @@ pub fn run() {
             get_downloads_path,
             check_file_exists,
             send_email_smtp,
+            download_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
