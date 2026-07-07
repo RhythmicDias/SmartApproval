@@ -14,10 +14,7 @@ import { mergePdfs } from "./lib/pdfEngine";
 import { loadSettings, type AppSettings, defaultSettings } from "./lib/settings";
 import { buildSubject, buildMergedFileName, extractInfoFromFilename, isNewerVersion } from "./lib/helpers";
 
-const SERVICE_BUTTONS = [
-  "EEG", "ABR", "OT", "SLT", "PT", "Psychology", "Psychiatry", "NCS", "EMG",
-  "ABA", "Dev-Peds", "Dietics"
-];
+
 
 function App() {
   const [files, setFiles] = useState<string[]>([]);
@@ -46,7 +43,7 @@ function App() {
         if (res.ok) {
           const data = await res.json();
           const latestVersion = data.tag_name;
-          const currentVersion = "1.0.39";
+          const currentVersion = "1.0.40";
           if (isNewerVersion(currentVersion, latestVersion)) {
             setHasUpdate(true);
           }
@@ -271,16 +268,49 @@ function App() {
             />
 
             {/* Service quick-insert buttons */}
-            <div className="service-buttons">
-              {SERVICE_BUTTONS.map((svc) => (
-                <button
-                  key={svc}
-                  className="btn btn-service"
-                  onClick={() => appendServiceText(svc)}
-                >
-                  {svc}
-                </button>
-              ))}
+            <div className="service-groups" style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "6px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", minWidth: "85px" }}>Procedures:</span>
+                <div className="service-buttons" style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {["EEG", "ABR", "NCS", "EMG", "ECG"].map((svc) => (
+                    <button
+                      key={svc}
+                      className="btn btn-service"
+                      onClick={() => appendServiceText(svc)}
+                    >
+                      {svc}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", minWidth: "85px" }}>Therapies:</span>
+                <div className="service-buttons" style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {["ABA", "OT", "PT", "SLT"].map((svc) => (
+                    <button
+                      key={svc}
+                      className="btn btn-service"
+                      onClick={() => appendServiceText(svc)}
+                    >
+                      {svc}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-secondary)", minWidth: "85px" }}>Referrals:</span>
+                <div className="service-buttons" style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {["Psychology", "Psychiatry", "Dev-Peds", "Dietic"].map((svc) => (
+                    <button
+                      key={svc}
+                      className="btn btn-service"
+                      onClick={() => appendServiceText(svc)}
+                    >
+                      {svc}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Actions row */}
@@ -363,7 +393,7 @@ function App() {
         >
           SmartApproval
         </span>{" "}
-        v1.0.39
+        v1.0.40
       </footer>
 
       {/* ─── Modals ─── */}

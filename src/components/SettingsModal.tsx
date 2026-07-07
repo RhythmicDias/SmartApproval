@@ -41,19 +41,19 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
       }
       const data = await res.json();
       const latestVersion = data.tag_name;
-      const currentVersion = "1.0.39";
+      const currentVersion = "1.0.40";
 
       if (isNewerVersion(currentVersion, latestVersion)) {
         setUpdateMessage(`New version available: ${latestVersion}!`);
         setUpdateStatus("new-version");
       } else {
-        setUpdateMessage("SmartApproval is up to date (v1.0.39).");
+        setUpdateMessage("SmartApproval is up to date (v1.0.40).");
         setUpdateStatus("up-to-date");
       }
     } catch (err) {
       console.warn("Could not check updates:", err);
       // Fallback for offline/private repositories
-      setUpdateMessage("SmartApproval is up to date (v1.0.39).");
+      setUpdateMessage("SmartApproval is up to date (v1.0.40).");
       setUpdateStatus("up-to-date");
     } finally {
       setCheckingUpdates(false);
@@ -408,7 +408,7 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                   <div>
                     <div style={{ fontWeight: 600, fontSize: "0.95rem" }}>Neuropedia SmartApproval</div>
                     <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginTop: "2px" }}>
-                      Current Version: <strong>v1.0.39</strong>
+                      Current Version: <strong>v1.0.40</strong>
                     </div>
                   </div>
                   <button
@@ -463,6 +463,17 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                     Release Notes
                   </div>
                   <div style={{ maxHeight: "150px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px", background: "var(--bg-elevated)", padding: "12px", borderRadius: "var(--radius-md)", border: "1px solid var(--border)" }}>
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", fontWeight: 600 }}>
+                        <span>v1.0.40</span>
+                        <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>July 2026</span>
+                      </div>
+                      <ul style={{ paddingLeft: "16px", marginTop: "4px", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
+                        <li>Grouped clinical services buttons into distinct sections (<strong>Procedures</strong>, <strong>Therapies</strong>, <strong>Referrals</strong>) with custom spacing.</li>
+                        <li>Added <strong>ECG</strong> to Procedures and standardized <strong>Dietic</strong> in Referrals.</li>
+                      </ul>
+                    </div>
+                    <hr style={{ border: "0", borderTop: "1px solid var(--border)" }} />
                     <div>
                       <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", fontWeight: 600 }}>
                         <span>v1.0.39</span>
