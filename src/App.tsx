@@ -350,7 +350,20 @@ function App() {
         >
           Stephen Dias
         </span>{" "}
-        &mdash; SmartApproval v1.0.37
+        &mdash;{" "}
+        <span
+          style={{ cursor: "pointer", textDecoration: "underline", color: "var(--primary)" }}
+          onClick={async () => {
+            try {
+              await openPath("https://rhythmicdias.github.io/SmartApproval/");
+            } catch (e) {
+              console.error(e);
+            }
+          }}
+        >
+          SmartApproval
+        </span>{" "}
+        v1.0.37
       </footer>
 
       {/* ─── Modals ─── */}
