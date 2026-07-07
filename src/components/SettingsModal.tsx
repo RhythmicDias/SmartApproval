@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { X, FolderOpen, Eye, EyeOff, Loader2, CheckCircle } from "lucide-react";
 import { open as openDialog } from "@tauri-apps/plugin-dialog";
 import { openPath } from "@tauri-apps/plugin-opener";
+import { writeFile } from "@tauri-apps/plugin-fs";
+import { invoke } from "@tauri-apps/api/core";
 import {
   loadSettings,
   saveSettings,
@@ -27,8 +29,8 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [updateMessage, setUpdateMessage] = useState("");
   const [updateStatus, setUpdateStatus] = useState<"idle" | "up-to-date" | "new-version">("idle");
-
-
+  const [latestRelease, setLatestRelease] = useState<any>(null);
+  const [downloadingUpdate, setDownloadingUpdate] = useState(false);
 
   const handleCheckUpdates = async () => {
     setCheckingUpdates(true);
@@ -40,6 +42,7 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
         throw new Error(`Failed to fetch releases: ${res.status}`);
       }
       const data = await res.json();
+      setLatestRelease(data);
       const latestVersion = data.tag_name;
       const currentVersion = "1.0.40";
 
@@ -57,6 +60,53 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
       setUpdateStatus("up-to-date");
     } finally {
       setCheckingUpdates(false);
+    }
+  };
+
+  const handleDownloadAndInstall = async () => {
+    if (!latestRelease) return;
+    setDownloadingUpdate(true);
+    setUpdateMessage("Downloading installer...");
+    try {
+      const isMac = navigator.userAgent.toLowerCase().includes("mac");
+      const assetExtension = isMac ? ".dmg" : ".exe";
+      
+      // Find asset
+      const asset = latestRelease.assets?.find((a: any) => a.name.endsWith(assetExtension));
+      if (!asset) {
+        throw new Error(`No installer asset found for your platform (${assetExtension})`);
+      }
+      
+      const downloadUrl = asset.browser_download_url;
+      const filename = asset.name;
+      
+      // Fetch download path
+      const downloadsPath = await invoke<string>("get_downloads_path");
+      const outputPath = `${downloadsPath}/${filename}`;
+      
+      // Download bytes
+      const response = await fetch(downloadUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to download installer: ${response.statusText}`);
+      }
+      
+      const buffer = await response.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+      
+      // Write file
+      await writeFile(outputPath, bytes);
+      
+      setUpdateMessage("Download complete! Launching installer...");
+      
+      // Launch installer
+      await openPath(outputPath);
+      
+      setUpdateStatus("idle");
+    } catch (err: any) {
+      console.error(err);
+      setUpdateMessage(`Update failed: ${err.message || err}`);
+    } finally {
+      setDownloadingUpdate(false);
     }
   };
 
@@ -444,15 +494,14 @@ export function SettingsModal({ onClose, onSaved, defaultTab }: SettingsModalPro
                       <button 
                         className="btn btn-ghost btn-sm" 
                         style={{ alignSelf: "flex-start", marginTop: "4px" }}
-                        onClick={async () => {
-                          try {
-                            await openPath("https://github.com/RhythmicDias/SmartApproval/releases/latest");
-                          } catch (e) {
-                            console.error(e);
-                          }
-                        }}
+                        onClick={handleDownloadAndInstall}
+                        disabled={downloadingUpdate}
                       >
-                        Download Update
+                        {downloadingUpdate ? (
+                          <><Loader2 size={12} className="spin" /> Downloading...</>
+                        ) : (
+                          "Download & Install Update"
+                        )}
                       </button>
                     )}
                   </div>
