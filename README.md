@@ -68,3 +68,17 @@ When configuring the email settings in the application:
 2. **Port 465 (SSL/TLS)**: Implicit TLS negotiation will be used.
 3. **Gmail/Workspace Accounts**: Make sure to use an **App Password** instead of your main account password if 2-Step Verification is active.
 
+---
+
+## Screenshots
+
+### Dark Mode (Default)
+| Main Interface | Settings Panel |
+| --- | --- |
+| ![Main Interface](docs/screenshots/dark_main.png) | ![Settings Panel](docs/screenshots/dark_settings.png) |
+
+### Light Mode
+| Main Interface | Settings Panel |
+| --- | --- |
+| ![Main Interface](docs/screenshots/light_main.png) | ![Settings Panel](docs/screenshots/light_settings.png) |
+
