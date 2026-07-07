@@ -1,6 +1,6 @@
 [package]
 name = "smart-approval"
-version = "1.0.37"
+version = "1.0.38"
 description = "Neuropedia SmartApproval - PDF merging and approval workflow"
 authors = ["Stephen Dias"]
 edition = "2021"

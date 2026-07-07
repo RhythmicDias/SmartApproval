@@ -277,6 +277,57 @@
       text-decoration: underline;
     }
 
+    /* Release Notes Section */
+    .release-notes {
+      padding: 60px 0 20px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    .release-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .release-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .release-version {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .release-date {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .release-list {
+      padding-left: 20px;
+    }
+
+    .release-list li {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    .release-list li strong {
+      color: var(--text);
+    }
+
     /* Responsive designs */
     @media (max-width: 768px) {
       .hero h1 {
@@ -307,15 +358,15 @@
 
     <!-- Hero Section -->
     <section class="hero">
-      <span class="badge">Release v1.0.37 Available</span>
+      <span class="badge">Release v1.0.38 Available</span>
       <h1>Fast, Secure Medical Report Merging & Dispatch</h1>
       <p>A native desktop application built for Neuropedia Clinicl to assist with clinical workflows to merge client
         medical reports, stamp details, and dispatch for insurance approvals instantly.</p>
 
       <div class="cta-group">
-        <a href="https://github.com/RhythmicDias/SmartApproval/releases/download/v1.0.37/SmartApproval_1.0.37_x64-setup.exe"
+        <a href="https://github.com/RhythmicDias/SmartApproval/releases/download/v1.0.38/SmartApproval_1.0.38_x64-setup.exe"
           class="btn btn-primary">Download Installer (.exe)</a>
-        <a href="https://github.com/RhythmicDias/SmartApproval/releases/download/v1.0.37/SmartApproval_1.0.37_x64_en-US.msi"
+        <a href="https://github.com/RhythmicDias/SmartApproval/releases/download/v1.0.38/SmartApproval_1.0.38_x64_en-US.msi"
           class="btn btn-secondary">Download MSI Package</a>
       </div>
     </section>
@@ -356,6 +407,35 @@
           <p>Drag, drop, and rearrange files with grip handles to order pages before merging, ensuring clinical reports
             are organized perfectly.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- Release Notes -->
+    <section class="release-notes">
+      <h2 class="section-title">Release Notes</h2>
+      
+      <div class="release-item">
+        <div class="release-header">
+          <span class="release-version">v1.0.38</span>
+          <span class="release-date">July 2026</span>
+        </div>
+        <ul class="release-list">
+          <li><strong>Secretary BCC Support:</strong> Added checkboxes to automatically add Dr. Aman's Sec and/or Dr. Arif's Sec to the BCC list of approval requests.</li>
+          <li><strong>General Configuration:</strong> Added input options inside the General settings tab to configure secretary email IDs.</li>
+          <li><strong>Footer Navigation:</strong> Linked the footer brand name "SmartApproval" directly to the official project webpage.</li>
+        </ul>
+      </div>
+
+      <div class="release-item">
+        <div class="release-header">
+          <span class="release-version">v1.0.37</span>
+          <span class="release-date">July 2026</span>
+        </div>
+        <ul class="release-list">
+          <li><strong>Send Only EMR Only:</strong> Added fast-path action to email clinical medical reports directly without merging.</li>
+          <li><strong>Premium HTML Emails:</strong> Formats outgoing approval requests in premium styled HTML with bold patient details.</li>
+          <li><strong>SMTP Enhancements:</strong> Switches ports dynamically between STARTTLS and implicit TLS to fix handshake issues.</li>
+        </ul>
       </div>
     </section>
 

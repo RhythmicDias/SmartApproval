@@ -46,7 +46,7 @@ function App() {
         if (res.ok) {
           const data = await res.json();
           const latestVersion = data.tag_name;
-          const currentVersion = "1.0.37";
+          const currentVersion = "1.0.38";
           if (isNewerVersion(currentVersion, latestVersion)) {
             setHasUpdate(true);
           }
@@ -363,7 +363,7 @@ function App() {
         >
           SmartApproval
         </span>{" "}
-        v1.0.37
+        v1.0.38
       </footer>
 
       {/* ─── Modals ─── */}
