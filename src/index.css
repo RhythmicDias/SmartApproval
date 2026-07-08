@@ -35,6 +35,7 @@
   --shadow-lg: 0 8px 32px rgba(43, 40, 38, 0.16);
 
   --transition: 0.18s ease;
+  --border-scroll: rgba(43, 40, 38, 0.2);
 }
 
 [data-theme="dark"] {
@@ -53,6 +54,7 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.6);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.75);
+  --border-scroll: rgba(245, 242, 235, 0.2);
 }
 
 /* ─────────────────────────────────────────
@@ -87,7 +89,7 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 6px 16px;
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
@@ -109,15 +111,15 @@ button, input, select, textarea {
 .app-main {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 20px;
+  padding: 10px 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
 }
 
 .app-footer {
   text-align: right;
-  padding: 8px 20px;
+  padding: 5px 16px;
   font-size: 0.75rem;
   color: var(--text-muted);
   border-top: 1px solid var(--border);
@@ -139,7 +141,7 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px 10px;
+  padding: 8px 12px 6px;
   border-bottom: 1px solid var(--border);
 }
 .card-header h2 {
@@ -195,7 +197,7 @@ button, input, select, textarea {
   color: var(--text-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 4px 10px;
+  padding: 3px 8px;
   font-size: 0.75rem;
 }
 .btn-service:hover {
@@ -206,8 +208,8 @@ button, input, select, textarea {
 
 .btn-merge {
   width: 100%;
-  padding: 13px;
-  font-size: 0.95rem;
+  padding: 9px;
+  font-size: 0.85rem;
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: #fff;
@@ -234,8 +236,8 @@ button, input, select, textarea {
    Drag-Drop List
 ───────────────────────────────────────── */
 .drag-drop-zone {
-  min-height: 120px;
-  padding: 12px;
+  min-height: 70px;
+  padding: 8px;
   transition: background var(--transition), border-color var(--transition);
 }
 .drag-drop-zone.drag-active {
@@ -247,8 +249,8 @@ button, input, select, textarea {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-height: 110px;
+  gap: 4px;
+  min-height: 60px;
   color: var(--text-muted);
   text-align: center;
   border: 2px dashed var(--border);
@@ -269,7 +271,7 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 10px;
+  padding: 4px 8px;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -314,7 +316,7 @@ button, input, select, textarea {
 /* ─────────────────────────────────────────
    Text Section
 ───────────────────────────────────────── */
-.text-section { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.text-section { padding: 8px 12px; display: flex; flex-direction: column; gap: 6px; }
 
 .text-input {
   width: 100%;
@@ -323,8 +325,8 @@ button, input, select, textarea {
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-family: inherit;
-  font-size: 0.85rem;
-  padding: 8px 12px;
+  font-size: 0.82rem;
+  padding: 6px 10px;
   resize: vertical;
   transition: border-color var(--transition);
 }
@@ -382,13 +384,13 @@ button, input, select, textarea {
 /* ─────────────────────────────────────────
    Send Approval Panel
 ───────────────────────────────────────── */
-.send-panel { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.send-panel { padding: 8px 12px; display: flex; flex-direction: column; gap: 6px; }
 
 .merged-file-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 6px 10px;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -421,7 +423,7 @@ button, input, select, textarea {
   color: var(--text-primary);
   font-family: inherit;
   font-size: 0.82rem;
-  padding: 6px 10px;
+  padding: 5px 8px;
   transition: border-color var(--transition);
 }
 .email-input:focus { outline: none; border-color: var(--border-focus); }
@@ -433,7 +435,7 @@ button, input, select, textarea {
   gap: 10px;
   justify-content: flex-end;
 }
-.btn-send { padding: 9px 20px; font-size: 0.85rem; font-weight: 600; }
+.btn-send { padding: 7px 16px; font-size: 0.82rem; font-weight: 600; }
 
 .status-badge {
   display: flex;
@@ -681,10 +683,10 @@ textarea { resize: vertical; }
 /* ─────────────────────────────────────────
    Scrollbar
 ───────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+::-webkit-scrollbar-thumb { background: var(--border-scroll); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-focus); }
 
 /* Settings Tabs */
 .settings-tabs {
